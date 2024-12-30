@@ -1,115 +1,85 @@
-/* Étape 1
+//recuperation et sockage des elements html dans des variables
+const champtexte = document.querySelector("#texte");
+const boutontraduire = document.querySelector("#traduire");
+const resultatTraduction = document.querySelector(".traduction")
+let resultat;                               //creation d'une variable 
+champtexte.placeholder = "Entrez un texte !" //contenu par defaut de l'input
 
-Dans un fichier JavaScript, commencez par écrire une fonction getLatinCharacterList. Cette fonction va prendre en paramètre
- du texte et retourner un tableau contenant chaque caractère.
-Tester la fonction en lui donnant une chaine de caractères “Hello, world”, et assurez-vous qu’elle renvoie bien 
-["H", "e", "l", "l", "o", ",", " ", "w", "o", "r", "l", "d"]*/
-function getLatinCharacterList(texte){   // declaration de la fonction
-    return texte.split('');              // convertir text en tableau de caractère en utilisant split('')
+const latinVersMorse = { 'A':'.-', 'B':'-...', 'C':'-.-.', 'D':'-..', 'E':'.', 'F':'..-.', 'G':'--.', 'H':'....',
+    'I':'..', 'J':'.---', 'K':'-.-', 'L':'.-..', 'M':'--', 'N':'-.', 'O':'---', 'P':'.--.', 'Q':'--.-', 'R':'.-.',
+     'S':'...', 'T':'-',   'U':'..-', 'V':'...-', 'W':'.--', 'X':'-..-', 'Y':'-.--', 'Z':'--..',' ':'/'};
+
+//fonction qui convertit du texte en une liste de caracteres
+function obtenirListeCaracteresLatins(texte){
+   return texte.split(''); //la methode .split() permet de convertir du texte en un tableau de carateres
 }
-    let monTexte = "Hello, word";       // declaration d'une variable qu'on passera en argument à notre fonction
-    let tableauDeCaractere = getLatinCharacterList(monTexte); // declaration d'une var ds laquelle on stocke le rsultat de la fx
-console.log(tableauDeCaractere);                            //consologuer la variable contenant notre fonction
-getLatinCharacterList(monTexte);
+console.log ('La methode split donne ça :',obtenirListeCaracteresLatins("Hello Mariama"));
 
-
-const latinToMorse = {
-	'A':'.-',
-	'B':'-...',
-	'C':'-.-.',
-	'D':'-..',
-	'E':'.',
-	'F':'..-.',
-	'G':'--.',
-	'H':'....',
-	'I':'..',
-	'J':'.---',
-	'K':'-.-',
-	'L':'.-..',
-	'M':'--',
-	'N':'-.',
-	'O':'---',
-	'P':'.--.',
-	'Q':'--.-',
-	'R':'.-.',
-	'S':'...',
-	'T':'-',
-	'U':'..-',
-	'V':'...-',
-	'W':'.--',
-	'X':'-..-',
-	'Y':'-.--',
-	'Z':'--..'
-};
-/* Étape 2
-À votre fichier, ajouter le dictionnaire en annexe 1. Il vous permettra d’établir une table de correspondance entre 
-les caractères alphabets latin et l’alphabet morse.
-Créer une fonction translateLatinCharacter qui prend un paramètre un caractère et renvoie sa correspondance en morse.
-Tester la fonction en lui donnant en paramètre “A”, et assurez-vous qu’elle renvoie bien .-.*/
-
-function translateLatinCharacter(caractere){   //declaration de la fx"translatelatinCharater"
-    return latinToMorse [caractere];           //on lui demande de retourner la valeur correspondant à lindex choisit
+//fonction qui traduit un caractere en morse
+function traduireCaractereLatin(caractere){
+   return latinVersMorse[caractere.toUpperCase()];
 }
-let monCaractere = "A";      // daclaration d'une variable qui contient la valeur de l'argument qu'on passera à notre fx
-let resultatEnMorse =translateLatinCharacter(monCaractere); //declaration d'une variable ds laquel on stocke notre fonction
-console.log(resultatEnMorse);            // afficher le resultat dans la console
-translateLatinCharacter(monCaractere);
+console.log("La traduction d'un caractere en morse :",traduireCaractereLatin('a'));
 
-/*Étape 3
-Ajouter une nouvelle fonction encode qui prend en paramètre du texte et qui va utiliser la fonction de l’étape 1, pour 
-chaque caractère,appliquer la fonction de l’étape 2 et ainsi récupérer son équivalent morse.
-Attention: la table de correspondance ne contient que des caractères majuscules. */
-//@TODO creer une fonction qui prend en parametre du texte
-//@TODO apler la 1er fonction pour convertir ce texte en tableau de caractere
-//@TODO apler la fonction 2 pour convertir notre tableau de caractere en morse
+//fonction qui traduit un texte en morse
+function encoder(texte) {
+   // Découpe le texte en caractères
+   const caracteres = obtenirListeCaracteresLatins(texte);
 
-function encode(text){
-    monTexte = "Bonjour Mariam"
-    tableauDeCaractere = getLatinCharacterList(monTexte); // declaration d'une var ds laquelle on stocke le rsultat de la fx
-    console.log(tableauDeCaractere);                            //consologuer la variable contenant notre fonction
+   // Traduit chaque caractère en Morse
+   const traduitEnMorse = caracteres.map(caractere => traduireCaractereLatin(caractere));
 
-    monCaractere =  ["B", "o", "n", "j", "o", "u", "r", " ", "M", "a", "R", "I", "A","M"];
-    for(let i =0 ; i<= monCaractere.length; i++){
-    resultatEnMorse = translateLatinCharacter(monCaractere[i]);
+   // Combine les résultats en une seule chaîne, séparée par des espaces
+   return traduitEnMorse.join(' ');
+  }
+console.log( "Traduction du texte en morse: ",encoder("Binta"));
 
-    console.log(resultatEnMorse );            // afficher le resultat dans la console
-    translateLatinCharacter(monCaractere[i]);
-    return latinToMorse [monTexte]
+// Dictionnaire Morse vers Latin
+const morseVersLatin = {'-': "T", '--': "M", '---': "O", '--.': "G", '--.-': "Q", '--..': "Z", '-.': "N", '-.-': "K",
+   '-.--': "Y", '-.-.': "C", '-..': "D", '-..-': "X", '-...': "B", '.': "E", '.-': "A", '.--': "W", '.---': "J", '.--.':
+    "P", '.-.': "R", '.-..': "L", '..': "I", '..-': "U", '..-.': "F", '...': "S", '...-': "V", '....': "H","/":' '};
 
+//fonction qui divise un texte Morse en liste de caractères Morse
+function obtenirListeCaracteresMorse(texteMorse){
+   const mots= texteMorse.split('/')
+   return mots.map(mot => mot.split(' '))
+}
+console.log("Traduction texte Morse en chaine de caracteres : ",obtenirListeCaracteresMorse(encoder("Hello Mariama")));
+
+//fonction qui traduit un caractere Morse en texte
+function traduireCaractereMorse(caractereMorse){
+   return morseVersLatin[caractereMorse] || ' ';
+}
+console.log( "Traduction caractere Morse:",traduireCaractereMorse('.-'))
+
+//fonction qui traduit un texte Morse en texte Latin
+function decoder(texteMorse){
+   // Découpe le texte Morse en tableau de caractères Morse
+   const motsMorse =  obtenirListeCaracteresMorse(texteMorse);
+   // Traduit chaque caractère Morse en caractère Latin
+   const motsDecodes = motsMorse.map(mot => mot.map(caractereMorse=> traduireCaractereMorse(caractereMorse)).join(''));
+   return motsDecodes.join(' ');
+   
+}
+console.log("Convertir du Morse en Latin:",decoder(".... . .-.. .-.. --- / -- .- .-. .. .- -- .-"))
+
+boutontraduire.addEventListener('click',()=>{
+    const texteATraduire = champtexte.value.trim();
+    if (!texteATraduire) { // Vérifie si l'entrée est vide
+        resultatTraduction.innerHTML = "Veuillez entrer du texte.";
+        return;
     }
-}
-encode(monTexte);
+   if( /^[.\- \/]+$/.test(texteATraduire)){
+        resultat = decoder(texteATraduire)
+        resultatTraduction.innerHTML = "traduction en latin: "+ resultat;
+    } else {
+    resultat = encoder(texteATraduire)
+    resultatTraduction.innerHTML = "traduction en morse: "+ resultat;
+   }
+});
 
-const morseToLatin = {
-    '-': "T",
-    '--': "M",
-    '---': "O",
-    '--.': "G",
-    '--.-': "Q",
-    '--..': "Z",
-    '-.': "N",
-    '-.-': "K",
-    '-.--': "Y",
-    '-.-.': "C",
-    '-..': "D",
-    '-..-': "X",
-    '-...': "B",
-    '.': "E",
-    '.-': "A",
-    '.--': "W",
-    '.---': "J",
-    '.--.': "P",
-    '.-.': "R",
-    '.-..': "L",
-    '..': "I",
-    '..-': "U",
-    '..-.': "F",
-    '...': "S",
-    '...-': "V",
-    '....': "H"
-  };
-/* Étape 4
-Vous trouverez en annexe 2 le dictionnaire de correspondance inversé. Ajoutez-le à votre code, et appliquez 
-les procédés similaire à ce qui a été fait pour le encode pour créer une fonction decode. Dans cet exercice,
- on admettra que les lettres en morse sont séparées par un espace, et les mots par des “/” (slash).
-Ainsi, créer la fonction getMorseCharacterList ainsi que translateMorseCharacter.*/
+champtexte.addEventListener('input', () => {
+   boutontraduire.disabled = champtexte.value.trim() === ""; // Vérifie si le champ est vide
+ 
+ });
+ 
